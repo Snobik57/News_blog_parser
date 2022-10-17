@@ -34,13 +34,13 @@ def get_news(url: str, headers=None):
         soup_news = bs4.BeautifulSoup(news_text, 'lxml')
 
         # структуру для взятия заголовка новости
-        title_cut = soup_news.find('h1', class_='main-headline js-main-headline')
+        title_cut = soup_news.find('h1', class_='js-main-headline')
 
         # структуру для взятия  даты и времени новости
-        date_cut = soup_news.find('time', class_='datetime datetime--publication')
+        date_cut = soup_news.find('time', class_='datetime--publication')
 
         # Структура для взятия текстового контента на новости
-        bottom_tag_soup = soup_news.find('div', class_='formatted-body io-article-body')
+        bottom_tag_soup = soup_news.find('div', class_='io-article-body')
 
         bottom_tag = f"<{bottom_tag_soup.name} class={''.join(bottom_tag_soup.attrs['class'])}>"
         top_tag = f"<{top_tag.name} class={''.join(top_tag.attrs['class'])}>"
