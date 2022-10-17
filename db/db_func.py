@@ -49,7 +49,11 @@ class FuncDB():
         Session = sessionmaker(bind=engine)
         self.session = Session()
 
-    def add_new_resource(self, link: str, title: str) -> bool:
+    def add_new_resource(self, link: str, title: str,
+                         top_tag,
+                         bottom_tag,
+                         title_cut,
+                         date_cut) -> bool:
         """
         Метод класса позволяет добавить данные о новом новостном ресурсе в таблицу Resource
         :params link: str - ссылка не ресурс
@@ -61,16 +65,29 @@ class FuncDB():
         new_resource = Resource(
             RESOURCE_NAME=title,
             RESOURCE_URL=link,
-            top_tag='1',
-            bottom_tag='1',
-            title_cut='1',
-            date_cut='1'
+            top_tag=top_tag,
+            bottom_tag=bottom_tag,
+            title_cut=title_cut,
+            date_cut=date_cut
         )
 
         self.session.add(new_resource)
         self.session.commit()
 
         return True
+
+    def get_resource(self, *args):
+        for resource_id in args:
+            query = self.session.query(Resource).filter(Resource.RESOURCE_ID == resource_id).all()
+            if query:
+
+                return {
+                    'url': query[0].RESOURCE_URL,
+                    'top_tag': query[0].top_tag,
+                    'bottom_tag': query[0].bottom_tag,
+                    'date_cut': query[0].date_cut,
+                    'title_cut': query[0].title_cut
+                }
 
     def get_id_resource(self, title: str) -> int:
         """
